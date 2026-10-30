@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=AetherOS First Boot & Hub
+Comment=Provisions AetherOS Flatpaks, RetroArch Cores, and launches Aether Hub
+Exec=/bin/bash -c "/usr/bin/aether-first-boot && /usr/bin/aether-hub"
+Terminal=false
+X-GNOME-Autostart-enabled=true

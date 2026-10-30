@@ -1,0 +1,24 @@
+# --- Web & Communication ---
+org.mozilla.firefox
+com.brave.Browser
+com.discordapp.Discord
+
+# --- Office & Productivity ---
+org.libreoffice.LibreOffice
+md.obsidian.Obsidian
+
+# --- Photo, Art & Video Production ---
+org.gimp.GIMP
+org.kde.krita
+org.inkscape.Inkscape
+org.blender.Blender
+org.kde.kdenlive
+
+# --- Streamer & Broadcast Suite ---
+com.obsproject.Studio
+com.feaneron.Boatswain
+
+# --- Emulation & Gaming ---
+org.libretro.RetroArch
+net.davidotek.pupgui2
+com.valvesoftware.Steam

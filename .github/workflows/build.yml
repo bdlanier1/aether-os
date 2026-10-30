@@ -1,0 +1,43 @@
+name: Build and Push AetherOS Image
+
+on:
+  push:
+branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+  IMAGE_NAME: aether-os
+
+jobs:
+  build:
+runs-on: ubuntu-latest
+permissions:
+  contents: read
+  packages: write
+
+steps:
+  - name: Free Disk Space on Runner
+    run: |
+      sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+      sudo docker image prune --all --force
+
+  - name: Checkout Repository
+    uses: actions/checkout@v4
+
+  - name: Build Image with Buildah
+    uses: redhat-actions/buildah-build@v2
+    with:
+      image: ${{ env.IMAGE_NAME }}
+      tags: latest ${{ github.sha }}
+      containerfiles: ./Containerfile
+      oci: true
+
+  - name: Push Image to GHCR
+    uses: redhat-actions/push-to-registry@v2
+    with:
+      image: ${{ env.IMAGE_NAME }}
+      tags: latest ${{ github.sha }}
+      registry: ${{ env.IMAGE_REGISTRY }}
+      username: ${{ github.actor }}
+      password: ${{ secrets.GITHUB_TOKEN }}
