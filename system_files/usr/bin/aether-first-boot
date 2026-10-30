@@ -3,7 +3,7 @@ set -euo pipefail
 
 STAMP_FILE="$HOME/.config/aether-first-boot.done"
 if [ -f "$STAMP_FILE" ]; then
-exit 0
+    exit 0
 fi
 
 mkdir -p "$HOME/.config"
@@ -12,8 +12,8 @@ echo "[AetherOS] Ensuring Flathub remote is enabled..."
 flatpak remote-add --user --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
 
 if [ -f /usr/share/aether-os/system-flatpaks.txt ]; then
-echo "[AetherOS] Installing AetherOS Flatpak Suite..."
-grep -vE '^\s*#|^\s*$' /usr/share/aether-os/system-flatpaks.txt | xargs -r flatpak install --user -y flathub
+    echo "[AetherOS] Installing AetherOS Flatpak Suite..."
+    grep -vE '^\s*#|^\s*$' /usr/share/aether-os/system-flatpaks.txt | xargs -r flatpak install --user -y flathub
 fi
 
 flatpak override --user --filesystem=host org.libretro.RetroArch || true
@@ -27,15 +27,15 @@ mkdir -p "$EMULATION_DIR/roms"/{snes,nes,gba,genesis,psx,n64,psp,arcade}
 mkdir -p "$RA_CORES_DIR"
 
 if command -v nvidia-smi >/dev/null 2>&1 && nvidia-smi -L >/dev/null 2>&1; then
-RA_VIDEO_DRIVER="vulkan"
-echo "[AetherOS] Physical NVIDIA GPU detected. Setting RetroArch driver to 'vulkan'."
+    RA_VIDEO_DRIVER="vulkan"
+    echo "[AetherOS] Physical NVIDIA GPU detected. Setting RetroArch driver to 'vulkan'."
 else
-RA_VIDEO_DRIVER="glcore"
-echo "[AetherOS] VM or non-NVIDIA display detected. Falling back to 'glcore' for RetroArch."
+    RA_VIDEO_DRIVER="glcore"
+    echo "[AetherOS] VM or non-NVIDIA display detected. Falling back to 'glcore' for RetroArch."
 fi
 
 if [ ! -f "$RA_CONFIG_DIR/retroarch.cfg" ]; then
-cat <<CFG > "$RA_CONFIG_DIR/retroarch.cfg"
+    cat <<CFG > "$RA_CONFIG_DIR/retroarch.cfg"
 video_driver = "$RA_VIDEO_DRIVER"
 video_vsync = "true"
 video_gpu_screenshot = "true"
@@ -48,15 +48,15 @@ fi
 
 BUILDBOT_URL="https://buildbot.libretro.com/nightly/linux/x86_64/latest"
 for core in snes9x_libretro.so mesen_libretro.so mgba_libretro.so genesis_plus_gx_libretro.so beetle_psx_hw_libretro.so mupen64plus_next_libretro.so ppsspp_libretro.so fbneo_libretro.so; do
-if [ ! -f "$RA_CORES_DIR/$core" ]; then
-    curl -sL "$BUILDBOT_URL/${core}.zip" -o "/tmp/${core}.zip" && \
-    unzip -q -o "/tmp/${core}.zip" -d "$RA_CORES_DIR" && \
-    rm -f "/tmp/${core}.zip" || true
-fi
+    if [ ! -f "$RA_CORES_DIR/$core" ]; then
+        curl -sL "$BUILDBOT_URL/${core}.zip" -o "/tmp/${core}.zip" && \
+        unzip -q -o "/tmp/${core}.zip" -d "$RA_CORES_DIR" && \
+        rm -f "/tmp/${core}.zip" || true
+    fi
 done
 
 if command -v ollama >/dev/null 2>&1; then
-ollama pull llama3.1:8b || true
+    ollama pull llama3.1:8b || true
 fi
 
 touch "$STAMP_FILE"
